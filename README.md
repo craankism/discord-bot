@@ -8,5 +8,5 @@ deploy slash command with:
 node deploy-commands.js
 ```
 ```
-https://discordjs.guide/legacy/app-creation/handling-events
+https://discordjs.guide/legacy/slash-commands/advanced-creation
 ```
