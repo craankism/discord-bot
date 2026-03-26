@@ -1,4 +1,9 @@
 # discord-bot
+Plan:
+
+- Helper bot
+- create google calendar entries
+
 Start bot with: 
 ```
 node .
