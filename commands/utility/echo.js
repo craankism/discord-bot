@@ -20,6 +20,6 @@ module.exports = {
         )
         .addBooleanOption((option) => option.setName('embed').setDescription('Whether or not the echo should be embedded')),
     async execute(interaction) {
-
+        // should echo the latest command
     },
 }
