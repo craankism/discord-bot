@@ -3,6 +3,20 @@ const { Events, Collection, MessageFlags } = require('discord.js');
 module.exports = {
     name: Events.InteractionCreate,
     async execute(interaction) {
+
+        // modal
+        //if (!interaction.isModalSubmit()) return;
+        if (interaction.customId === 'myModal') {
+            await interaction.reply({ content: 'Your submission was received successfully!' });
+            // Get the data entered by the user
+            const starter = interaction.fields.getStringSelectValues('starter');
+            const titleInput = interaction.fields.getTextInputValue('titleInput');
+            const dateInput = interaction.fields.getTextInputValue('dateInput');
+            const timeInput = interaction.fields.getTextInputValue('timeInput');
+            const descriptionInput = interaction.fields.getTextInputValue('descriptionInput');
+            console.log({ starter, titleInput, dateInput, timeInput, descriptionInput });
+        }
+
         if (!interaction.isChatInputCommand()) return;
 
         const command = interaction.client.commands.get(interaction.commandName);
