@@ -47,13 +47,6 @@ module.exports = {
             .setPlaceholder('What is this about?')
             .setRequired(false);
 
-        // const locationInput = new TextInputBuilder()
-        //     .setCustomId('locationInput')
-        //     .setLabel('Location')
-        //     .setStyle(TextInputStyle.Short)
-        //     .setPlaceholder('Discord VC / Address / Link')
-        //     .setRequired(false);
-
         const favoriteStarterSelect = new StringSelectMenuBuilder()
             .setCustomId('starter')
             .setPlaceholder('Make a selection!')
@@ -88,12 +81,10 @@ module.exports = {
         const timeRow = new ActionRowBuilder().addComponents(timeInput);
         modal.addLabelComponents(favoriteStarterLabel);
         const descriptionRow = new ActionRowBuilder().addComponents(descriptionInput);
-        // const locationRow = new ActionRowBuilder().addComponents(locationInput);
 
         modal.addComponents(titleRow, dateRow, timeRow, descriptionRow);
 
         await interaction.showModal(modal);
         if (!interaction.isModalSubmit()) return;
-        // console.log(interaction);
     },
 };
