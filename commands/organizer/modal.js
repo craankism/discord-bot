@@ -11,8 +11,8 @@ const {
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('modal')
-        .setDescription('Opens a sample modal'),
+        .setName('calendar')
+        .setDescription('creates a calendar .ics file'),
 
     async execute(interaction) {
         const modal = new ModalBuilder()
@@ -30,15 +30,15 @@ module.exports = {
             .setCustomId('dateInput')
             .setLabel('Date')
             .setStyle(TextInputStyle.Short)
-            .setPlaceholder('2026-03-27')
+            .setPlaceholder('30-03-2026')
             .setRequired(true);
 
         const timeInput = new TextInputBuilder()
             .setCustomId('timeInput')
             .setLabel('Time')
             .setStyle(TextInputStyle.Short)
-            .setPlaceholder('18:30')
-            .setRequired(true);
+            .setPlaceholder('18:30 (Leave emtpy for whole all-day')
+            .setRequired(false);
 
         const descriptionInput = new TextInputBuilder()
             .setCustomId('descriptionInput')
@@ -48,7 +48,7 @@ module.exports = {
             .setRequired(false);
 
         const favoriteStarterSelect = new StringSelectMenuBuilder()
-            .setCustomId('starter')
+            .setCustomId('type')
             .setPlaceholder('Make a selection!')
             // Modal only property on select menus to prevent submission, defaults to true
             .setRequired(true)
@@ -56,22 +56,18 @@ module.exports = {
                 // String select menu options
                 new StringSelectMenuOptionBuilder()
                     // Label displayed to user
-                    .setLabel('Bulbasaur')
+                    .setLabel('Event')
                     // Description of option
-                    .setDescription('The dual-type Grass/Poison Seed Pokémon.')
+                    //.setDescription('The dual-type Grass/Poison Seed Pokémon.')
                     // Value returned to you in modal submission
-                    .setValue('bulbasaur'),
+                    .setValue('VEVENT'),
                 new StringSelectMenuOptionBuilder()
-                    .setLabel('Charmander')
-                    .setDescription('The Fire-type Lizard Pokémon.')
-                    .setValue('charmander'),
-                new StringSelectMenuOptionBuilder()
-                    .setLabel('Squirtle')
-                    .setDescription('The Water-type Tiny Turtle Pokémon.')
-                    .setValue('squirtle'),
+                    .setLabel('Task')
+                    //.setDescription('The Fire-type Lizard Pokémon.')
+                    .setValue('VTODO'),
             );
         const favoriteStarterLabel = new LabelBuilder()
-            .setLabel("What's your favorite Gen 1 Pokémon starter?")
+            .setLabel("Type")
             // Set string select menu as component of the label
             .setStringSelectMenuComponent(favoriteStarterSelect);
 
@@ -85,6 +81,7 @@ module.exports = {
         modal.addComponents(titleRow, dateRow, timeRow, descriptionRow);
 
         await interaction.showModal(modal);
-        if (!interaction.isModalSubmit()) return;
+        return;
+
     },
 };
