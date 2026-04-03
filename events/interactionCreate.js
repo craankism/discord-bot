@@ -2,9 +2,6 @@ const {
     Events,
     Collection,
     MessageFlags,
-    ActionRowBuilder,
-    ButtonBuilder,
-    ButtonStyle,
 } = require('discord.js');
 
 module.exports = {
@@ -14,16 +11,16 @@ module.exports = {
         // modal
         if (interaction.isModalSubmit() && interaction.customId === 'myModal') {
             // Get the data entered by the user
-            const type = interaction.fields.getStringSelectValues('type');
             const titleInput = interaction.fields.getTextInputValue('titleInput');
             const dateInput = interaction.fields.getTextInputValue('dateInput');
             const timeInput = interaction.fields.getTextInputValue('timeInput');
+            const locationInput = interaction.fields.getTextInputValue('locationInput');
             const descriptionInput = interaction.fields.getTextInputValue('descriptionInput');
 
-            console.log({ type, titleInput, dateInput, timeInput, descriptionInput });
+            console.log({ titleInput, dateInput, timeInput, locationInput, descriptionInput });
 
             function formatDate(dateStr) {
-                const [dd, mm, yyyy] = dateStr.split('-');
+                const [dd, mm, yyyy] = dateStr.split('.');
                 return `${yyyy}${mm}${dd}`;
             }
             function formatTime(timeStr) {
@@ -43,7 +40,30 @@ module.exports = {
             const currentdate = new Date();
             const timestamp = currentdate.today() + 'T' + currentdate.timeNow() + 'Z';
 
-            const time = 'T' + formatTime(timeInput) + '00';
+            let timeStart = '';
+            let timeEnd = '';
+            if (timeInput.includes("-")) {
+                const time = timeInput.split("-");
+                timeStart = 'T' + formatTime(time[0]) + '00';
+                timeEnd = 'T' + formatTime(time[1]) + '00';
+            }
+
+            let dateStart;
+            let dateEnd;
+            if (dateInput.includes("-")) {
+                const date = dateInput.split("-");
+                dateStart = formatDate(date[0]);
+                dateEnd = formatDate(date[1]);
+            } else {
+                dateStart = formatDate(dateInput);
+                dateEnd = formatDate(dateInput);
+            }
+
+            let location = locationInput
+                .split(",")
+                .map(part => part.trim())
+                .join("\\, ");
+
 
             // respond with action row and button, it contains a downloadlink of the .ics file
             const icsText =
@@ -51,14 +71,15 @@ module.exports = {
                 `VERSION:2.0\r\n` +
                 `PRODID:-//discord-bot//EN\r\n` +
                 `CALSCALE:GREGORIAN\r\n` +
-                `BEGIN:${type}\r\n` +
+                `BEGIN:VEVENT\r\n` +
                 `SUMMARY:${titleInput}\r\n` +
                 `UID:${crypto.randomUUID()}\r\n` +
-                `DTSTART:${formatDate(dateInput) + time}\r\n` +
-                `DTEND:${formatDate(dateInput) + time}\r\n}` +
+                `DTSTART:${dateStart + timeStart}\r\n` +
+                `DTEND:${dateEnd + timeEnd}\r\n` +
                 `DTSTAMP:${timestamp}\r\n` +
+                `LOCATION:${location}\r\n` +
                 `DESCRIPTION:${descriptionInput}\r\n` +
-                `END:${type}\r\n` +
+                `END:VEVENT\r\n` +
                 `END:VCALENDAR`;
             // WORK IN PROGRESS https://icalendar.org/
 
