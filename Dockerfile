@@ -9,4 +9,4 @@ COPY . .
 
 USER node
 
-CMD ["node", "index.js"]
+CMD ["sh", "-c", "node deploy-commands.js && node index.js"]
