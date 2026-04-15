@@ -17,7 +17,7 @@ module.exports = {
     async execute(interaction) {
         const modal = new ModalBuilder()
             .setCustomId('myModal')
-            .setTitle('My Modal');
+            .setTitle('Appointment');
 
         const titleInput = new TextInputBuilder()
             .setCustomId('titleInput')
